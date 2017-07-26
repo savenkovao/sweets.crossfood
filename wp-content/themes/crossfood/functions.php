@@ -66,11 +66,38 @@ function my_extra_fields() {
 // код блока
 function extra_fields_box_func( $post ){
 	?>
-	<p><label>Автор статьи <input type="text" name="extra[news_author]" value="<?php echo get_post_meta($post->ID, 'news_author', 1); ?>" style="width:50%" /></label></p>
+
+	<p><label>Цена<br> <input type="text" name="extra[desserts_price]" value="<?php echo get_post_meta($post->ID, 'desserts_price', 1); ?>" style="width:50%" /></label></p>
 
 	<input type="hidden" name="extra_fields_nonce" value="<?php echo wp_create_nonce(__FILE__); ?>" />
+
+
+
+
+	<p><label>Калории<br> <input type="text" name="extra[desserts_cal]" value="<?php echo get_post_meta($post->ID, 'desserts_cal', 1); ?>" style="width:50%;" /></label></p>
+
+	<input type="hidden" name="extra_fields_nonce" value="<?php echo wp_create_nonce(__FILE__); ?>" />
+	
+	<p><label>Белки<br> <input type="text" name="extra[desserts_prot]" value="<?php echo get_post_meta($post->ID, 'desserts_prot', 1); ?>" style="width:50%;" /></label></p>
+
+	<input type="hidden" name="extra_fields_nonce" value="<?php echo wp_create_nonce(__FILE__); ?>" />
+	
+	<p><label>Жиры<br> <input type="text" name="extra[desserts_fat]" value="<?php echo get_post_meta($post->ID, 'desserts_fat', 1); ?>" style="width:50%;" /></label></p>
+
+	<input type="hidden" name="extra_fields_nonce" value="<?php echo wp_create_nonce(__FILE__); ?>" />
+
+	<p><label>Углеводы<br> <input type="text" name="extra[desserts_car]" value="<?php echo get_post_meta($post->ID, 'desserts_car', 1); ?>" style="width:50%;" /></label></p>
+
+	<input type="hidden" name="extra_fields_nonce" value="<?php echo wp_create_nonce(__FILE__); ?>" />
+
+
+
+
+
 	<?php
 }
+
+
 
 // включаем обновление полей при сохранении
 add_action('save_post', 'my_extra_fields_update', 0);
@@ -102,7 +129,7 @@ function my_extra_fields_update( $post_id ){
 
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'bootstrap', get_template_directory_uri() . '/src/js/bootstrap.js',"","1.0");
-		wp_enqueue_script( 'main', get_template_directory_uri() . '/src/js/main.js',"","1.28");
+		wp_enqueue_script( 'main', get_template_directory_uri() . '/src/js/main.js',"","1.26");
 
 	}
 

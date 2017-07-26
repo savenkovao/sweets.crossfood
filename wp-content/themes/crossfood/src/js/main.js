@@ -717,7 +717,7 @@
 
 		function activateNode(targetNode) {
 			targetNode.classList.add('active');	
-			selectOtions(targetNode);	
+			selectOptions(targetNode);	
 		}
 
 		function deactivateNode(targetNode) {
@@ -726,84 +726,68 @@
 
 
 
-		// Select options
-
-		
-		function selectOtions (targetNode) {
-			var selectSubscribe = document.getElementById('form-input_subscribe');
-			var selectCalories = document.getElementById('form-input_calories');
-
-			var dataSub;
-			var dataCal;
-			
-
-			if (cuisineListener.subscribe == 'stand') {
-					selectSubscribe.selectedIndex = 0;
-					dataSub = 'stand';
-			} else if(cuisineListener.subscribe == 'fit') {
-					selectSubscribe.selectedIndex = 1;
-					dataSub = 'fit';
-			} else if (cuisineListener.subscribe == 'prem') {
-					selectSubscribe.selectedIndex = 2;
-					dataSub = 'prem';
-			} else if (cuisineListener.subscribe == 'veg') {
-					selectSubscribe.selectedIndex = 3;
-					dataSub = 'veg';
-			}
+		var $dessert = $('#form-input_dessert');
+		var $allDeserts = $('.desserts__title');
+		var $inputPrice = $('#form-input_price');
 
 
-			if (cuisineListener.calories == '1200') {
-					selectCalories.selectedIndex = 0;
-					dataCal = 1200;
-			} else if(cuisineListener.calories == '1500') {
-					selectCalories.selectedIndex = 1;	
-					dataCal = 1500;
-			} else if (cuisineListener.calories == '2000') {
-					selectCalories.selectedIndex = 2;
-					dataCal = 2000;
-			} else if (cuisineListener.calories == '2500') {
-					selectCalories.selectedIndex = 3;
-					dataCal = 2500;
-			}
-			
-			setPriceInForm(dataSub, dataCal);
+		$dessert.children().remove();
 
-		}
-
-
-		$('#form_2 form').on('change', function (event) {
-
-			var selectSubscribe = document.getElementById('form-input_subscribe').value;
-			var selectCalories = document.getElementById('form-input_calories').value;
-
-			if (selectSubscribe == 'Фитнес') {
-					selectSubscribe = 'fit';
-			} else if(selectSubscribe == 'Премиум') {
-					selectSubscribe = 'prem';
-			} else if (selectSubscribe == 'Вегетарианский') {
-					selectSubscribe = 'veg';
-			} else if (selectSubscribe == 'Стандарт') {
-					selectSubscribe = 'stand';
-			} else if (selectSubscribe == 'Пробный день') {
-					selectSubscribe = 'trial';
-			}
-
-			setPriceInForm(selectSubscribe, selectCalories);
-
+		$allDeserts.each(function(key, value){
+			var option = '<option>' + $(value).text() +'</option>';
+			$dessert.append( option );
 		});
 
 
+		// Select options
 
-		function setPriceInForm(subscribe, calories){
-			if (subscribe != 'trial') {
-				cuisineListener.price = $('#'+subscribe+'-'+cuisineListener.week+'-'+calories+'-'+'mo'+' .cuisine__item-price-text'+'[data-cuisine-qount = 5]').html();
-			} else if(subscribe == 'trial'){
-				cuisineListener.price = $('#'+subscribe).html();
-			}
+		
+		function selectOptions (targetNode) {
+			var selectedDessert;
+			var $currentDessert = $('#desserts .tab-block__tab-item.item.active .desserts__title').text();
+			
 
 
-			$('#form-input_price').val(cuisineListener.price);
+			$('#form-input_dessert option').each(function(key, value) {
+				if ($(value).text() == $currentDessert) {
+					selectedDessert = $currentDessert;
+					$dessert[0].selectedIndex = key;
+				}
+
+				var currentPrice = $('#desserts .tab-block__tab-item.item.active .cuisine__item-price-text span').text(); 
+				$inputPrice.val(currentPrice);
+
+			});
+
+
+
+			
+			// setPriceInForm(dataSub, dataCal);
+
 		}
+
+
+		$dessert.on('change', function (event) {
+			var chosenElem = $dessert.val().trim();
+			var currentPrice;
+			$allDeserts.each(function(key, value) {
+console.log(chosenElem);
+console.log($(value).text());
+
+				if($(value).text().trim() === chosenElem){
+					currentPrice = $(value).closest('.desserts__item').find('.cuisine__item-price-text span').text();
+					$inputPrice.val(currentPrice);
+
+					console.log('ololo');
+				}
+				// console.log($(value).closest('.desserts__item').find('.cuisine__item-price-text span').text());
+
+			});
+
+
+// desserts__item
+		});
+
 
 
 
@@ -815,6 +799,8 @@
 		});
 
 		$('#forms .sharedaddy.sd-sharing-enabled').remove();
+
+
 
 
 
