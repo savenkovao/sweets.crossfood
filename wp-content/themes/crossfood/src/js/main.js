@@ -1,52 +1,5 @@
 (function($){
 	$(document).ready(function(){
-		// Mobile menu enabling
-
-		// var brgrMenu = document.getElementById("brgr-menu");
-		var menu = document.getElementById("header-menu");
-
-		// var stick1 = document.getElementById("brgr-menu-stick-1");
-		// var stick2 = document.getElementById("brgr-menu-stick-2");
-		// var stick3 = document.getElementById("brgr-menu-stick-3");
-		// var count = 0;
-
-
-		// brgrMenu.addEventListener("click", enableBrgrMenu, false);
-
-
-		function enableBrgrMenu(event){
-			var e = getTarget(event);
-
-			if (e != undefined) {
-				count++;
-				if(count%2==0) {
-					deactivateBrgrMenu();
-					
-				} else {
-					activateBrgrMenu();
-
-				}
-			}
-		}
-
-		function activateBrgrMenu(){
-			menu.style.display = 'block';
-			stick1.classList.add('stick-1-active');
-			stick2.classList.add('disable');
-			stick3.classList.add('stick-3-active');
-			
-		}
-
-		function deactivateBrgrMenu(){
-			menu.style.display = '';
-			stick1.classList.remove('stick-1-active');
-			stick2.classList.remove('disable');
-			stick3.classList.remove('stick-3-active');
-			count = 0;
-		}
-
-	// team slider browsing
-
 
 		var teamSlider = document.getElementById('team-slider');
 
@@ -69,7 +22,9 @@
 			while (target != event.currentTarget) {
 
 				if (target.hasAttribute('data-meta-node')) {
-					var e = {target, currentTarget};
+					var e = {target: target,
+						currentTarget: currentTarget
+					};
 					// console.log(e);
 					return e;
 
@@ -87,12 +42,12 @@
 			getScreenWidth();
 
 			if (currentScreenWidth >= 768) {
-				
+
 				var target = e.target;
 				var currentTarget = e.currentTarget;
 
 				var targetWidth = target.clientWidth;
-				var dataAction = target.getAttribute('data-action');			
+				var dataAction = target.getAttribute('data-action');
 				var allItems = getItems();
 
 				var lItem = teamSlider.querySelectorAll('.l')[0];
@@ -102,9 +57,9 @@
 				target.setAttribute('data-action', 'l');
 
 				if (dataAction == 'ml') {
-					
+
 					var newSl = allItems.sr.cloneNode(true);
-					
+
 					newSl.style.marginLeft = (-targetWidth * 1) + 'px';
 
 					newSl.setAttribute('data-action', 'sl');
@@ -129,7 +84,7 @@
 
 					setTimeout( function() {
 						newSl.style.marginLeft = 0;
-						
+
 					}, 0);
 
 					setTimeout( function() {
@@ -140,7 +95,7 @@
 
 					var newSl = allItems.sr.cloneNode(true);
 					var newMl = allItems.mr.cloneNode(true);
-					
+
 
 					newMl.setAttribute('data-action', 'sl');
 					newMl.setAttribute('data-meta-node','');
@@ -168,7 +123,7 @@
 
 					setTimeout( function() {
 						newMl.style.marginLeft = 0;
-						
+
 					}, 0);
 
 					setTimeout( function() {
@@ -177,9 +132,9 @@
 					}, 205);
 
 				} else if (dataAction == 'mr'){
-					
+
 					var newSr = allItems.sl.cloneNode(true);
-					
+
 					newSr.setAttribute('data-action', 'sr');
 					newSr.setAttribute('data-meta-node','');
 					newSr.classList.remove('sl');
@@ -202,13 +157,13 @@
 
 					setTimeout( function() {
 						allItems.sl.style.marginLeft = (-targetWidth * 1) + 'px';
-						
+
 					}, 0);
 
 					setTimeout( function() {
 						allItems.sl.remove();
 					}, 300);
-					
+
 				} else if (dataAction == 'sr'){
 
 					var newSr = allItems.ml.cloneNode(true);
@@ -240,21 +195,17 @@
 
 					setTimeout( function() {
 						allItems.sl.style.marginLeft = (-targetWidth * 2) + 'px';
-						
+
 					}, 0);
 
 					setTimeout( function() {
 						allItems.sl.remove();
 						allItems.ml.remove();
 					}, 400);
-					
+
 				}
 			}
 		}
-
-
-
-
 
 		function getItems() {
 
@@ -282,186 +233,10 @@
 				}
 			}
 
-			var items = {sl, ml, mr, sr};
+			var items = {sl:sl, ml:ml, mr:mr, sr:sr};
 
 			return items;
 		}
-
-
-	// cuisine switching 
-
-		var cuisineListener = {
-			subscribe: 'stand',
-			week: 1,
-			calories: '1200',
-			day: 'mo',
-			cuisines: 5,
-			price: '280/320'
-		}
-
-		var subscribe = document.getElementById('subscribe');
-		var subscribeItems = document.getElementById('subscribe-items');
-		var cuisineWeek = document.getElementById('cuisine-week');	
-		// var cuisines_3_5 = document.getElementById('cuisines_3_5');
-		var allCuisines = document.getElementById('all-cuisines');
-
-		if (subscribe) {			
-			subscribe.addEventListener('click', setSubscribe, false);
-			subscribeItems.addEventListener('click', setSubscribeItems, false);
-			cuisineWeek.addEventListener('click', setCuisineWeek, false);
-			// cuisines_3_5.addEventListener('click', setCuisines_3_5, false);
-		}
-		
-
-		function setSubscribe(event) {
-			enableBlock(event);
-		}
-
-		function setSubscribeItems(event) {
-			enableBlock(event);
-		}
-
-		function setCuisineWeek(event) {
-			enableBlock(event);
-		}
-
-		function setCuisines_3_5(event) {
-			enableBlock(event);
-		}
-
-		getStartCuisine();
-
-
-
-
-		function getStartCuisine() {
-			getCurrentDate ();
-			selectCuisineItem();
-		}
-
-
-		function getCurrentDate () {
-		
-			var date = new Date();
-
-			Date.prototype.getWeekNumber = function(){
-				var d = new Date(+this);
-				d.setHours(0,0,0,0);
-				d.setDate(d.getDate()+4-(d.getDay()||7));
-				return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
-			};
-
-			var weekNumber = date.getWeekNumber();
-			var dayNumber = date.getDay();
-			var hourNumber = date.getHours();
-
-			getWeek(weekNumber, dayNumber, hourNumber);
-
-		}
-
-
-		function getWeek(weekNumber, dayNumber, hourNumber) {
-			// there are 2 weeks - №1 and №2		
-			cuisineListener.week = weekNumber % 2 + 1;
-			
-			if (dayNumber == 0 && hourNumber >= 5) {			
-				cuisineListener.week = (weekNumber + 1) % 2 + 1;
-			}
-		}
-
-
-		function enableBlock(event) {
-			var e = getTarget(event);
-			if (e != undefined) {
-				var dataAction = e.target.getAttribute('data-action');
-				var dataIdentifier = e.target.getAttribute('data-identifier');
-
-				highlight (e.target);
-
-				searchByAttribute(dataAction, dataIdentifier, e.target);
-
-				changeListener(dataIdentifier);			
-			}		
-		} 
-
-
-		function searchByAttribute(action, identifier, target) {
-			var nodes = document.querySelectorAll('[' + action + ']');
-
-			for (var i = 0; i < nodes.length; i++) {
-				var currentIdentifier = nodes[i].getAttribute(action);
-
-				if(currentIdentifier == identifier) {
-					nodes[i].classList.remove('disable');
-				} else {
-					nodes[i].classList.add('disable');
-				}
-			}	
-		}
-
-		function changeListener(identifier) {
-			if(event.currentTarget == subscribe) {
-				cuisineListener.subscribe = identifier;
-
-				if (identifier == 'fit') {
-					cuisineListener.calories = '1200';
-				} else if (identifier == 'prem') {
-					cuisineListener.calories = '1200';
-				} else if (identifier == 'veg') {
-					cuisineListener.calories = '1200';
-				} else if (identifier == 'stand') {
-					cuisineListener.calories = '1200';
-				}
-				
-				getCurrentDate ();
-
-
-				checkHighLightedItem();
-
-			} else if (event.currentTarget == subscribeItems) {
-			 if(identifier)	cuisineListener.calories = identifier;
-			} else if (event.currentTarget == cuisineWeek) {
-				cuisineListener.day = identifier;
-			}
-			//  else if (event.currentTarget == cuisines_3_5) {
-			// 	cuisineListener.cuisines = identifier;
-			// }
-
-			selectCuisineItem();
-		}
-
-		function selectCuisineItem() {
-			var selector = cuisineListener.subscribe + '-' + cuisineListener.week + '-' + cuisineListener.calories + '-' + cuisineListener.day;
-			var currentItem = document.getElementById(selector);
-			console.log(selector);
-			
-			cuisineListener.price = $('#' + selector + ' .cuisine__item-price-text' +'[data-cuisine-qount = 5]').html();
-
-		// cuisineListener.cuisines
-
-			if (currentItem) {
-			
-				for(var i = 0; i < allCuisines.children.length; i++) {
-					allCuisines.children[i].classList.add('disable');
-				}
-
-				currentItem.classList.remove('disable');
-			}
-		}
-
-		function checkHighLightedItem() {
-
-			var items = subscribeItems.querySelectorAll('[' + 'data-identifier' + ']');
-
-			for (var i = 0; i < items.length; i++) {
-				var itemIdentifier = items[i].getAttribute('data-identifier');
-				
-				if (cuisineListener.calories == itemIdentifier) {
-					highlight (items[i]);
-				}
-			}		
-		}
-
 
 	// reviewsSlider browsing/opening
 
@@ -483,19 +258,15 @@
 			var currentScreenWidth;
 
 			var coordX;
-			var coordY;			
-
-
+			var coordY;
 
 
 		createNavButtons();
-		
 
 		reviewsSliderNavBtn.addEventListener('click', btnBrowseSlider, false);
 		reviewsSliderNavArw.addEventListener('click', arwBrowseSlider, false);
 		reviewsSliderInner.addEventListener('click', openCurrentSlide, false);
 		window.addEventListener('resize', resizeFunction, false);
-
 
 		function btnBrowseSlider(event) {
 			browseReviewsSlider(event);
@@ -525,13 +296,12 @@
 			previousScreenWidth = currentScreenWidth;
 		}
 
-
 		function createNavButtons() {
 			var buttons = [];
 
 			for (var i = 0; i < buttonsQuantity; i++) {
 				buttons[i] = document.createElement('div');
-				buttons[i].classList.add('reviews-slider__button');			
+				buttons[i].classList.add('reviews-slider__button');
 				buttons[i].setAttribute('data-button-number', i);
 				buttons[i].setAttribute('data-meta-node', '');
 				reviewsSliderNavBtn.appendChild(buttons[i]);
@@ -539,7 +309,6 @@
 
 			buttons[0].classList.add('active');
 		}
-
 
 		function browseReviewsSlider(event) {
 
@@ -554,30 +323,26 @@
 			}
 		}
 
-
-
-
 		function openSlide(event) {
 
 			getScreenWidth();
 			var e = getTarget(event);
 			var target = e.target;
-			var currentTarget = e.currentTarget
+			var currentTarget = e.currentTarget;
 
 			coordX = event.clientX;
 			coordY = event.clientY;
 
-			if (e != undefined) {
+			if (e !== undefined) {
 				if (currentScreenWidth > 768) {
 					createNewNode(target, coordX, coordY);
 				}
 			}
 		}
 
-
 		function createNewNode(target, coordX, coordY) {
-			var currentSlideSrc = target.getAttribute('src'); 
-			var currentTagName = target.tagName; 
+			var currentSlideSrc = target.getAttribute('src');
+			var currentTagName = target.tagName;
 			var nodeContainer = document.createElement('div');
 			var node = document.createElement(currentTagName);
 
@@ -603,20 +368,19 @@
 			}, 0);
 		}
 
-
 		function removeNode(event) {
 			var currentTarget;
 			var node;
 
 			if (event.type !== 'scroll') {
-				currentTarget = event.currentTarget;			
+				currentTarget = event.currentTarget;
 			} else {
 				currentTarget = document.getElementById('reveiws-open-container');
 			}
 
 			node = currentTarget.firstChild;
 			node.classList.remove('visible');
-			
+
 			node.style.top = 'calc(' + coordY +'px' + ' - ' + "5%)";
 			node.style.left = 'calc(' + coordX +'px' + ' - ' + "5%)";
 
@@ -627,49 +391,47 @@
 			window.removeEventListener('scroll', removeNode, false);
 		}
 
-
 		function browseSliderInner(target, currentTarget, slider) {
 			var allSlides = reviewsSliderInner.children.length;
 
 
-			if (currentTarget == reviewsSliderNavBtn) {
+			if (currentTarget === reviewsSliderNavBtn) {
 
 				var dataButtonNumber = target.getAttribute('data-button-number');
 				var rest = allSlides % slidesOnPage;
-				var integer = reviewsSliderInner.children.length/3 - rest;	
+				var integer = reviewsSliderInner.children.length/3 - rest;
 
 				// 3.125 - margin left for items
 
-				if(target != reviewsSliderNavBtn.lastChild) {
+				if(target !== reviewsSliderNavBtn.lastChild) {
 					sliderInnerMargin = -dataButtonNumber * (100 + 3.125);
 				} else {
 					sliderInnerMargin = -(dataButtonNumber - 1 + (rest/slidesOnPage)) * (100 + 3.125);
 				}
 
-			} else if (currentTarget == reviewsSliderNavArw) {
+			} else if (currentTarget === reviewsSliderNavArw) {
 
 				var arrow = target.getAttribute('data-action');
 
-				if (arrow == 'left') {
+				if (arrow === 'left') {
 					sliderInnerMargin += 100;
 
 					if( sliderInnerMargin > 0 ) {
 						sliderInnerMargin = 0;
 					}
 
-				} else if (arrow == 'right') {
+				} else if (arrow === 'right') {
 					sliderInnerMargin -= 100;
 
 					if( sliderInnerMargin <= (-allSlides * 100) ) {
 						sliderInnerMargin = -(allSlides - 1) * 100;
 					}
-					
+
 				}
 			}
 
 			slider.children[0].style.marginLeft = sliderInnerMargin + '%';
 		}
-
 
 		function highlight (object) {
 			for(var i = 0; i < object.parentNode.children.length;i++){
@@ -680,7 +442,6 @@
 
 	}
 
-
 		var currentScreenWidth;
 		var previousScreenWidth = getScreenWidth();
 
@@ -690,14 +451,12 @@
 		}
 
 
-
-
 		document.body.addEventListener('click', switchNode, false);
 
 		function switchNode(event) {
 			var e = getTarget(event);
 
-			if (e != undefined) {
+			if (e !== undefined) {
 				var target = e.target;
 				var action = target.getAttribute('data-action');
 				var targetNodeSelector = target.getAttribute('data-target');
@@ -705,32 +464,37 @@
 
 				if (targetNode) {
 
-					if (action == 'activate') {
+					if (action === 'activate') {
 						activateNode(targetNode);
-					} else if (action == 'deactivate'){
+					} else if (action === 'deactivate'){
 						deactivateNode(targetNode);
-						console.log(action);
 					}
 				}
-			}	
+			}
 		}
 
 		function activateNode(targetNode) {
-			targetNode.classList.add('active');	
-			selectOptions(targetNode);	
+			targetNode.classList.add('active');
+			selectOptions(targetNode);
 		}
 
 		function deactivateNode(targetNode) {
-			targetNode.classList.remove('active');		
+			targetNode.classList.remove('active');
 		}
 
 
+		// order form
 
 		var $dessert = $('#form-input_dessert');
 		var $allDeserts = $('.desserts__title');
+		var $inputPrice100 = $('#form-input_price_100');
 		var $inputPrice = $('#form-input_price');
+		var $inputWeight = $('#form-input_weight');
+        var currentPrice;
 
+        // initialization. Inputs filling
 
+        $inputWeight[0].selectedIndex = 0;
 		$dessert.children().remove();
 
 		$allDeserts.each(function(key, value){
@@ -741,55 +505,49 @@
 
 		// Select options
 
-		
 		function selectOptions (targetNode) {
 			var selectedDessert;
-			var $currentDessert = $('#desserts .tab-block__tab-item.item.active .desserts__title').text();
-			
-
+			var $currentDessert = $('#desserts .item.active .desserts__title').text();
 
 			$('#form-input_dessert option').each(function(key, value) {
-				if ($(value).text() == $currentDessert) {
+				if ($(value).text() === $currentDessert) {
 					selectedDessert = $currentDessert;
 					$dessert[0].selectedIndex = key;
 				}
 
-				var currentPrice = $('#desserts .tab-block__tab-item.item.active .cuisine__item-price-text span').text(); 
-				$inputPrice.val(currentPrice);
+				currentPrice = $('#desserts .item.active .cuisine__item-price-text span').text();
+
+				$inputPrice100.val(currentPrice);
+                setInputPrice();
 
 			});
-
-
-
-			
-			// setPriceInForm(dataSub, dataCal);
-
 		}
 
 
-		$dessert.on('change', function (event) {
-			var chosenElem = $dessert.val().trim();
-			var currentPrice;
+        $dessert.on('change', function (event) {
+            var chosenElem = $dessert.val().trim();
+
 			$allDeserts.each(function(key, value) {
-console.log(chosenElem);
-console.log($(value).text());
-
-				if($(value).text().trim() === chosenElem){
+				if ($(value).text().trim() === chosenElem){
 					currentPrice = $(value).closest('.desserts__item').find('.cuisine__item-price-text span').text();
-					$inputPrice.val(currentPrice);
+					$inputPrice100.val(currentPrice);
 
-					console.log('ololo');
+                    setInputPrice();
 				}
-				// console.log($(value).closest('.desserts__item').find('.cuisine__item-price-text span').text());
-
 			});
-
-
-// desserts__item
 		});
 
+        $inputWeight.on('change', function (event) {
+            currentPrice = $inputPrice100.val();
+            setInputPrice();
+		});
+
+        function setInputPrice() {
+            $inputPrice.val( ( ($inputWeight.val()/1000) * (currentPrice*10) ).toFixed(2) );
+        }
 
 
+        // soft scroll
 
 		$("#header-menu").on("click","a", function (event) {
 			event.preventDefault();
@@ -798,21 +556,17 @@ console.log($(value).text());
 			$('body,html').animate({scrollTop: top}, 1500);
 		});
 
+
+        // removing sharing buttons
 		$('#forms .sharedaddy.sd-sharing-enabled').remove();
 
 
+        // removing img attr height/width
 
+        $('img').each(function(){
+            $(this).removeAttr('height');
+            $(this).removeAttr('width');
+        });
 
-
-
-
-		
 	});
 }(jQuery));
-
-jQuery(document).ready(function($){
-	$('img').each(function(){
-		$(this).removeAttr('height');
-		$(this).removeAttr('width');
-	});	 
-});
